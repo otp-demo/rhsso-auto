@@ -1,0 +1,10 @@
+.venv/
+.env
+__pycache__/
+temp/
+backup/
+.DS_Store
+SAML-Metadata-IDPSSODescriptor.xml
+*-modified.json
+k8s/secrets.yaml
+test.sh

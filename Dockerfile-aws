@@ -1,0 +1,16 @@
+FROM quay.io/leoliu2011/python39oc:v1
+RUN yum install -y unzip
+
+WORKDIR /usr/temp
+RUN curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip" && \
+unzip awscliv2.zip && \
+./aws/install && \
+aws --version
+
+WORKDIR /usr/src
+
+COPY . /usr/src/
+
+RUN pip3.9 install -r requirements.txt
+
+CMD ["/bin/bash", "config-aws.sh"]

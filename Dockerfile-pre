@@ -1,0 +1,9 @@
+FROM quay.io/leoliu2011/python39oc:v1
+
+WORKDIR /usr/src
+
+COPY pre-processing.sh /usr/src/
+COPY ./k8s/sso-configs.yaml /usr/src/k8s/
+
+CMD ["/bin/bash", "pre-processing.sh"]
+

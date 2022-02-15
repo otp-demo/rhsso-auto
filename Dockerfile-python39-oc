@@ -1,0 +1,14 @@
+FROM registry.redhat.io/openshift4/ose-cli:v4.8
+
+WORKDIR /usr/temp
+
+RUN yum install -y gcc openssl-devel bzip2-devel libffi-devel zlib-devel make jq
+
+RUN wget https://www.python.org/ftp/python/3.9.6/Python-3.9.6.tgz 
+
+RUN tar xzf Python-3.9.6.tgz 
+
+RUN cd Python-3.9.6 && \
+./configure --enable-optimizations && \
+make altinstall && \
+rm ../Python-3.9.6.tgz 
