@@ -31,10 +31,12 @@ Where
 - Click Add button under "Identity Providers",  and choose OpenID Connect
 
 ![](../images/openshift-id-config-add.png)
+
 Figure 1.2
 
 3. Configure OAuth Openshift
 ![](../images/openshift-oidc.png)
+
 Figure 1.3
 ```bash
 Name: keycloak
@@ -45,6 +47,8 @@ Issuer URL: https://${keycloak-host}/auth/realms/${realm-name}
 
 4. (Optional) If the keycloak/RHSSO is using self-signed certs, provide the complete chain of trust to "CA file" option.
 ![](../images/openshift-oidc-ca.png)
+
+Figure 1.4
 
 # Troubleshooting
 In case of not showing the login button on the Openshift console login page or failed login, looking into pods from 2 namespaces will be extremely helpful.
