@@ -32,10 +32,16 @@ Go back to your domain registrar and create a new TXT record for your domain bas
   After above two steps are completed we are ready to federate `acme.com` domain to Azure tenancy. A sample script `IdPFederation.ps1` can be found in this repo. Running this script will allow RH-SSO users with a verified domain specified in `$dom` variable to sign into Azure Portal via RH-SSO as IdP.
 
   > Global Administrator running this script should go through all the comments in `IdPFederation.ps1` file and update variables as required.
-  
-⚠️ Users must be added manually on Azure Active Directory (AAD) using `New-MsolUser` command and with correct `ImmutableId` - please refer to comments on `IdPFederation.ps1` for more details. For example, if you have a user John Smith on RH-SSO, you must assign attribute with key `saml.persistent.name.id.for.urn:federation:MicrosoftOnline` and `somerandomstring` as value on RH-SSO. You will then have to manually create this user in AAD and use same random string as value for `ImmutableId`. Sample of complete `New-MsolUser` command can be found at the bottom of `IdPFederation.ps1` script. 
 
 If run successfully, you should be able to use RH-SSO as IdP for signing into Azure portal.
+
+
+⚠️ Users must be added manually on Azure Active Directory (AAD) using `New-MsolUser` command and with correct `ImmutableId` - please refer to comments on `IdPFederation.ps1` for more details. For example, if you have a user John Smith on RH-SSO, you must assign attribute with key `saml.persistent.name.id.for.urn:federation:MicrosoftOnline` and `somerandomstring` as value on RH-SSO. You will then have to manually create this user in AAD and use same random string as value for `ImmutableId`. Sample of complete `New-MsolUser` command can be found at the bottom of `IdPFederation.ps1` script. 
+
+⚠️ RBAC for each user must be configured on Microsoft Azure. Azure role-based access control (Azure RBAC) has several Azure built-in roles that you can assign to users that are federated from custom domain. You can learn more about built-in roles here: [Azure built-in roles](https://docs.microsoft.com/en-us/azure/role-based-access-control/built-in-roles). Please also review how to assign roles roles using Azure portal here: [How to assign Azure roles using the Azure portal](https://docs.microsoft.com/en-us/azure/role-based-access-control/role-assignments-portal?tabs=current)
+
+
+
 
 
 ## Useful links
