@@ -2,6 +2,7 @@
 we will see using Keycloak as an Identity Provider for your Openshift cluster act as an Identity Broker. Vise versa is also possible, which won't be covered in this tutorial
 
 ![2](../images/openshift-flow.png)
+
 Figure 1.1
 
 Once you configure the identity provider is configured, you will see a new button displayed below the original `kubeadmin` login button. 
