@@ -34,7 +34,7 @@ Where
 Figure 1.2
 
 3. Configure OAuth Openshift
-![](../image/openshift-oidc.png)
+![](../images/openshift-oidc.png)
 Figure 1.3
 ```bash
 Name: keycloak
