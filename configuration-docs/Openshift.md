@@ -29,6 +29,7 @@ Where
 2. Go to Openshift Console as the `Kubeadmin`, 
 - "Administration -> Cluster Settings -> Global Configuration -> Oauth"
 - Click Add button under "Identity Providers",  and choose OpenID Connect
+
 ![](../images/openshift-id-config-add.png)
 Figure 1.2
 
