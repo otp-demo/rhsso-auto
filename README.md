@@ -36,7 +36,8 @@ RHSSO environment variables are used across different services (Ansible tower, O
 | ARGO_ADMIN_EMAIL | sso-configs  | ArgoCD  | User email. should be general. Note: for azure login, the email is suggested to have the same domain as the RHSSO |
 | ARGO_ADMIN_FIRSTNAME | sso-configs  | ArgoCD  | User firstname. should be general. |
 | ARGO_ADMIN_LASTNAME | sso-configs  | ArgoCD  | User lastname. should be general. |
-| OPENSHIFT_OAUTH_NAME | argo-configs  | Hub cluster  | The name that will be used to match configs between the openshift cluster and RHSSO. |
+| OPENSHIFT_OAUTH_NAME | argo-configs  | Openshift cluster  | The name that will be used to match configs between the openshift cluster and RHSSO. |
+| CA_CERT_BUNDLE | sso-configs  | Openshift cluster  | The CA cert chain of trust for Keycloak/RHSSO |
 | HTTP_DEBUG | argo-configs  | Common | To turn on DEBUG mode for http traffic, mainly for http contents |
 | TLS_VERIFY | argo-configs  | Common | Default to true. Can turn off in case the TLS is not available on RHSSO |
 | AZURE_CLIENT_ID | argo-configs  | Azure account | The client name for Azure client |
