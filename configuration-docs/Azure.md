@@ -1,7 +1,11 @@
 # RH-SSO integration with Azure
 
 ## Introduction
-The purpose of this readme is to provide step by step guide to integrate RH-SSO with Microsoft Azure. After your RH-SSO instance is deployed you can use below guide to implement SAML SSO between RH-SSO (IdP) and Microsoft Azure (SP). You can automate the deployment of realm client for Azure via Jobs and ArgoCD but due to dependency on Windows OS and a requirement to complete one-off domain federation on Azure side, ideally below configuration should be completed manually by a Global Administrator on Azure side. For the purposes of this guide, we will be using `acme.com` as an example, you can use any domain that you own to federate with Microsoft Azure.
+The purpose of this readme is to provide step by step guide to integrate RH-SSO with Microsoft Azure. The **Automation** section of this readme provides information regarding how to build and push an image to create Azure client for RH-SSO and the **Manual Configuration for Azure integration** section provides details regarding configuration changes that you should make on Azure side for a successful integration between Azure (SP) and RH-SSO (IdP). 
+
+You can automate the deployment of Azure client via Jobs and Argo CD but due to dependency on Windows OS and a requirement to complete one-off domain federation on Azure side, ideally **Manual Configuration for Azure integration** section of this readme should be completed manually by a Global Administrator on Azure side. 
+
+> For the purposes of this guide, we will be using `acme.com` as an example, you can use any domain that you own to federate with Microsoft Azure.
 
 ## Solution Overview
 
@@ -11,8 +15,61 @@ The purpose of this readme is to provide step by step guide to integrate RH-SSO 
 - Working RH-SSO instance
 - Global Administrator access on Azure to federate domain
 - Windows OS to install and run PowerShell script
+- Environment Variables from `argocd-configs` Config Map and `sso-configs` Secret
+## Automation
+You can automate deployment of Azure client for RH-SSO using following:
 
-## Configuration
+* **Step 1: Create an image for deploying client**
+  * First of all you will need to create an image using file [create-client-azure.py](../create-client-azure.py) which has all the required os, tools, and payload information to access RH-SSO api and create client. Please pay attention to environment variables that are in use and they must be available to successfully create Azure client. As mentioned in prerequisites section, environment variables are stored in two differrent places ( `argocd-configs` Config Map and `sso-configs` Secret). A complete list of environment variables can be found at [Integration with RHSSO Environment Variables
+](https://github.com/otp-demo/rhsso-auto#integration-with-rhsso-environment-variables).
+
+* **Step 2: Run script to create an image and run from a Dockerfile**
+  * After you are satisfied with variables, payload information etc. in [create-client-azure.py](../create-client-azure.py) file, you can use a script [config-azure.sh](../config-azure.sh) to run .py and create a Dockerfile that that installs [requirements](../requirements.txt) and runs [config-azure.sh](../config-azure.sh). For testing, you can also run it locally by setting local environment variables or storing them in .env file.
+    * **Run locally**
+      ```
+      python3 create-client-azure.py 
+      ```
+    * **Build as an image**
+      Navigate to the root directory of this project and build the image using docker or podman and run the following command.
+      ```
+      docker build -t quay.io/mahesh_v/azure-keycloak-integration:v1 -f Dockerfile-azure .
+      docker push quay.io/mahesh_v/azure-keycloak-integration:v1
+      ``` 
+    * **Run as a Container**
+    When running the application as a container, you need to pass the relevant environment variables to the container. This can be done through the -e flag.
+      ```
+      docker run --name bank-rhsso-config \
+      -e RHSSO_BASE_URL=url_to_your_rhsso_instance \
+      -e RHSSO_ADMIN_USER=admin \
+      -e RHSSO_ADMIN_PASSWORD=the_admin_password rhsso-auto-deploy
+      ```
+* **Step 3: Running in Kubernetes or OpenShift**
+  This script is designed to be ran as a Job in a Kubernetes-like environment. This Job will run a container containing this script once using the environment variables provided to it. You will likely need to push an image of this script with your realm export to a container registry that your cluster can reach. It is recommended that you get the admin username and password from a Secret or similarly secure resource.
+
+  **Example Job**
+  ```
+  apiVersion: batch/v1
+  kind: Job
+  metadata:
+    name: azure-keycloak-integration
+    namespace: sso-integration
+  spec:
+    template:
+      spec:
+       containers:
+       - name: azure-keycloak-integration
+         image: quay.io/mahesh_v/azure-keycloak-integration:v1
+         envFrom:
+         - configMapRef:
+             name: argocd-configs
+         - secretRef:
+             name: sso-configs
+         imagePullPolicy: Always
+       restartPolicy: Never
+    backoffLimit: 5
+
+  ```
+## Manual Configuration for Azure integration
 
 * **Step 1: Add Custom Domain to AAD**
   * Sign in to the Azure portal using a **Global administrator** account for the directory.
@@ -23,7 +80,7 @@ The purpose of this readme is to provide step by step guide to integrate RH-SSO 
 * **Step 2: Add DNS information for your custom domain**
 
   After you add your custom domain name to Azure AD, you must return to your domain registrar and add the Azure AD DNS information from your copied TXT file. Creating this TXT record for your domain verifies ownership of your domain name.
-Go back to your domain registrar and create a new TXT record for your domain based on your copied DNS information. Set the time to live (TTL) to 3600 seconds (60 minutes), and then save the record.
+  Go back to your domain registrar and create a new TXT record for your domain based on your copied DNS information. Set the time to live (TTL) to 3600 seconds (60 minutes), and then save the record.
 
     > After you register your custom domain name, make sure it's valid in Azure AD. The propagation from your domain registrar to Azure AD can be instantaneous or it can take a few days, depending on your domain registrar.
 
@@ -39,10 +96,6 @@ If run successfully, you should be able to use RH-SSO as IdP for signing into Az
 ⚠️ Users must be added manually on Azure Active Directory (AAD) using `New-MsolUser` command and with correct `ImmutableId` - please refer to comments on `IdPFederation.ps1` for more details. For example, if you have a user John Smith on RH-SSO, you must assign attribute with key `saml.persistent.name.id.for.urn:federation:MicrosoftOnline` and `somerandomstring` as value on RH-SSO. You will then have to manually create this user in AAD and use same random string as value for `ImmutableId`. Sample of complete `New-MsolUser` command can be found at the bottom of `IdPFederation.ps1` script. 
 
 ⚠️ RBAC for each user must be configured on Microsoft Azure. Azure role-based access control (Azure RBAC) has several Azure built-in roles that you can assign to users that are federated from custom domain. You can learn more about built-in roles here: [Azure built-in roles](https://docs.microsoft.com/en-us/azure/role-based-access-control/built-in-roles). Please also review how to assign roles roles using Azure portal here: [How to assign Azure roles using the Azure portal](https://docs.microsoft.com/en-us/azure/role-based-access-control/role-assignments-portal?tabs=current)
-
-
-
-
 
 ## Useful links
 [Set up a trust between your SAML identity provider and Azure AD](https://docs.microsoft.com/en-us/azure/active-directory/hybrid/how-to-connect-fed-saml-idp#set-up-a-trust-between-your-saml-identity-provider-and-azure-ad)
