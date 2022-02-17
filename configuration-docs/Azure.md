@@ -30,19 +30,12 @@ You can automate deployment of Azure client for RH-SSO using following:
       python3 create-client-azure.py 
       ```
     * **Build as an image**
-      Navigate to the root directory of this project and build the image using docker or podman and run the following command.
+      Navigate to the root directory of this project and build the image using docker or podman and run the following command. Update repository name and image name as required in build and push commands.
+      
       ```
       docker build -t quay.io/mahesh_v/azure-keycloak-integration:v1 -f Dockerfile-azure .
       docker push quay.io/mahesh_v/azure-keycloak-integration:v1
       ``` 
-    * **Run as a Container**
-    When running the application as a container, you need to pass the relevant environment variables to the container. This can be done through the -e flag.
-      ```
-      docker run --name bank-rhsso-config \
-      -e RHSSO_BASE_URL=url_to_your_rhsso_instance \
-      -e RHSSO_ADMIN_USER=admin \
-      -e RHSSO_ADMIN_PASSWORD=the_admin_password rhsso-auto-deploy
-      ```
 * **Step 3: Running in Kubernetes or OpenShift**
   This script is designed to be ran as a Job in a Kubernetes-like environment. This Job will run a container containing this script once using the environment variables provided to it. You will likely need to push an image of this script with your realm export to a container registry that your cluster can reach. It is recommended that you get the admin username and password from a Secret or similarly secure resource.
 
