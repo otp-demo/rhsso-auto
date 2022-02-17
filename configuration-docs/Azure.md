@@ -1,9 +1,9 @@
 # RH-SSO integration with Azure
 
 ## Introduction
-The purpose of this readme is to provide step by step guide to integrate RH-SSO with Microsoft Azure. The **Automation** section of this readme provides information regarding how to build and push an image to create Azure client for RH-SSO and the **Manual Configuration for Azure integration** section provides details regarding configuration changes that you should make on Azure side for a successful integration between Azure (SP) and RH-SSO (IdP). 
+The purpose of this readme is to provide step by step guide to integrate RH-SSO with Microsoft Azure. The [**Automation**](#automation) section of this readme provides information regarding how to build and push an image to create Azure client for RH-SSO and the [**Manual Configuration for Azure integration**](#manual-configuration-for-azure-integration) section provides details regarding configuration changes that you should make on Azure side for a successful integration between Azure (SP) and RH-SSO (IdP). 
 
-You can automate the deployment of Azure client via Jobs and Argo CD but due to dependency on Windows OS and a requirement to complete one-off domain federation on Azure side, ideally **Manual Configuration for Azure integration** section of this readme should be completed manually by a Global Administrator on Azure side. 
+You can automate the deployment of Azure client via Jobs and Argo CD but due to dependency on Windows OS (to run `MSOnline` cmdlets) and a requirement to complete one-off domain federation on Azure side, ideally [**Manual Configuration for Azure integration**](#manual-configuration-for-azure-integration) section of this readme should be completed manually by a Global Administrator on Azure side.
 
 > For the purposes of this guide, we will be using `acme.com` as an example, you can use any domain that you own to federate with Microsoft Azure.
 
@@ -37,7 +37,7 @@ You can automate deployment of Azure client for RH-SSO using following:
       docker push quay.io/mahesh_v/azure-keycloak-integration:v1
       ``` 
 * **Step 3: Running in Kubernetes or OpenShift**
-  This script is designed to be ran as a Job in a Kubernetes-like environment. This Job will run a container containing this script once using the environment variables provided to it. You will likely need to push an image of this script with your realm export to a container registry that your cluster can reach. It is recommended that you get the admin username and password from a Secret or similarly secure resource.
+  This script is designed to be ran as a Job in a Kubernetes-like environment. This Job will run a container containing this script once using the environment variables provided to it. You will likely need to push an image of this script with your payload attributes to a container registry that your cluster can reach. It is recommended that you get the admin username and password from a Secret or similarly secure resource.
 
   **Example Job**
   ```
@@ -63,6 +63,7 @@ You can automate deployment of Azure client for RH-SSO using following:
 
   ```
 ## Manual Configuration for Azure integration
+After client is setup on RH-SSO, next step is to federate custom domain and run PowerShell script [IdPFederation.ps1](../IdPFederation.ps1). Please complete below three steps to configure your Microsoft Azure tenant to use RH-SSO as Identity Provider for your custom domain. 
 
 * **Step 1: Add Custom Domain to AAD**
   * Sign in to the Azure portal using a **Global administrator** account for the directory.
@@ -81,12 +82,12 @@ You can automate deployment of Azure client for RH-SSO using following:
   
   After above two steps are completed we are ready to federate `acme.com` domain to Azure tenancy. A sample script `IdPFederation.ps1` can be found in this repo. Running this script will allow RH-SSO users with a verified domain specified in `$dom` variable to sign into Azure Portal via RH-SSO as IdP.
 
-  > Global Administrator running this script should go through all the comments in `IdPFederation.ps1` file and update variables as required.
+  > Global Administrator running this script should go through all the comments in [IdPFederation.ps1](../IdPFederation.ps1) file and update variables as required.
 
 If run successfully, you should be able to use RH-SSO as IdP for signing into Azure portal.
 
 
-⚠️ Users must be added manually on Azure Active Directory (AAD) using `New-MsolUser` command and with correct `ImmutableId` - please refer to comments on `IdPFederation.ps1` for more details. For example, if you have a user John Smith on RH-SSO, you must assign attribute with key `saml.persistent.name.id.for.urn:federation:MicrosoftOnline` and `somerandomstring` as value on RH-SSO. You will then have to manually create this user in AAD and use same random string as value for `ImmutableId`. Sample of complete `New-MsolUser` command can be found at the bottom of `IdPFederation.ps1` script. 
+⚠️ Users must be added manually on Azure Active Directory (AAD) using `New-MsolUser` command and with correct `ImmutableId` - please refer to comments on [IdPFederation.ps1](../IdPFederation.ps1) for more details. For example, if you have a user John Smith on RH-SSO, you must assign attribute with key `saml.persistent.name.id.for.urn:federation:MicrosoftOnline` and `somerandomstring` as value on RH-SSO. You will then have to manually create this user in AAD and use same random string as value for `ImmutableId`. Sample of complete `New-MsolUser` command can be found at the bottom of `IdPFederation.ps1` script. 
 
 ⚠️ RBAC for each user must be configured on Microsoft Azure. Azure role-based access control (Azure RBAC) has several Azure built-in roles that you can assign to users that are federated from custom domain. You can learn more about built-in roles here: [Azure built-in roles](https://docs.microsoft.com/en-us/azure/role-based-access-control/built-in-roles). Please also review how to assign roles roles using Azure portal here: [How to assign Azure roles using the Azure portal](https://docs.microsoft.com/en-us/azure/role-based-access-control/role-assignments-portal?tabs=current)
 
