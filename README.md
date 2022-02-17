@@ -15,6 +15,8 @@ Red Hat Single Sign-On (RH-SSO) is based on the Keycloak project and enables you
 
 [OpenShift](configuration-docs/Openshift.md)
 
+[Example App](https://github.com/akiyamn/rhsso-auto-deploy)
+
 ## Solution Overview
 
 ![Alt text](images/rh-sso.png?raw=true "RH-SSO Solution Overview")
