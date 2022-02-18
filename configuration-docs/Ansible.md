@@ -1,14 +1,65 @@
 # RH-SSO integration with Ansible
 
 ## Introduction
-The purpose of this readme is to provide step by step guide to integrate RH-SSO with Ansible Controller. After your RH-SSO instance is deployed you can use below guide to implement SAML SSO between RH-SSO (IdP) and Ansible (SP). You can automate the deployment of realm client for Ansible via Jobs and ArgoCD but SAML configuration on Ansible Controller must be done manually by Ansible Administrator.
+The purpose of this readme is to provide step by step guide to integrate RH-SSO with Ansible Controller. The [**Automation**](#automation) section of this readme provides information regarding how to build and push an image to create Ansible client for RH-SSO and the [**Manual Configuration for Ansible integration**](#manual-configuration-for-ansible-integration) section provides details regarding configuration changes that you should make on Ansible side for a successful integration between Ansible (SP) and RH-SSO (IdP). 
+
+You can automate the deployment of Ansible client via Jobs and Argo CD but SAML configuration on Ansible Controller must be done manually by Ansible Administrator. [**Manual Configuration for Ansible integration**](#manual-configuration-for-ansible-integration) provides steps that you must complete in order to successfully integrate Ansible with your RH-SSO instance.
 
 ## Prerequisites 
 - Working RH-SSO instance
 - Working Ansible Controller instance
 - Administrator access for Ansible and RH-SSO
+- Environment Variables from `argocd-configs` Config Map and `sso-configs` Secret
 
-## Configuration
+## Automation
+You can automate deployment of Ansible client for RH-SSO using following:
+
+* **Step 1: Create an image for deploying client**
+  * First of all you will need to create an image using file [create-client-ansible.py](../create-client-ansible.py) which has all the required os, tools, and payload information to access RH-SSO api and create client. Please pay attention to environment variables that are in use and they must be available to successfully create Ansible client. As mentioned in prerequisites section, environment variables are stored in two differrent places ( `argocd-configs` Config Map and `sso-configs` Secret). A complete list of environment variables can be found at [Integration with RHSSO Environment Variables
+](https://github.com/otp-demo/rhsso-auto#integration-with-rhsso-environment-variables).
+
+* **Step 2: Run script to create an image and run from a Dockerfile**
+  * After you are satisfied with variables, payload information etc. in [create-client-ansible.py](../create-client-ansible.py) file, you can use a script [config-ansible.sh](../config-ansible.sh) to run .py and create a Dockerfile that that installs [requirements](../requirements.txt) and runs [config-ansible.sh](../config-ansible.sh). For testing, you can also run it locally by setting local environment variables or storing them in .env file.
+    * **Run locally**
+      ```
+      python3 create-client-ansible.py 
+      ```
+    * **Build as an image**
+      Navigate to the root directory of this project and build the image using docker or podman and run the following command. Update repository name and image name as required in build and push commands.
+      
+      ```
+      docker build -t quay.io/mahesh_v/ansible-keycloak-integration:v1 -f Dockerfile-ansible .
+      docker push quay.io/mahesh_v/ansible-keycloak-integration:v1
+      ``` 
+* **Step 3: Running in Kubernetes or OpenShift**
+  This script is designed to be ran as a Job in a Kubernetes-like environment. This Job will run a container containing this script once using the environment variables provided to it. You will likely need to push an image of this script with your payload attributes to a container registry that your cluster can reach. It is recommended that you get the admin username and password from a Secret or similarly secure resource.
+
+  **Example Job**
+  ```
+  apiVersion: batch/v1
+  kind: Job
+  metadata:
+    name: ansible-keycloak-integration
+    namespace: sso-integration
+  spec:
+    template:
+      spec:
+       containers:
+       - name: ansible-keycloak-integration
+         image: quay.io/mahesh_v/ansible-keycloak-integration:v1
+         envFrom:
+         - configMapRef:
+             name: argocd-configs
+         - secretRef:
+             name: sso-configs
+         imagePullPolicy: Always
+       restartPolicy: Never
+    backoffLimit: 5
+
+  ```
+## Manual Configuration for Ansible integration
+After client is setup on RH-SSO, next step is to configure Ansible SAML settings. Please complete below four steps to configure your Ansible instance to use RH-SSO as Identity Provider. 
+
 * **Step 1: Fetch certificates and keys**
   * If Ansible Client for RHSSO was deployed via GitOps and Argo CD, you can execute following commands to fetch values for `X509_CERT` and `KEY_CERT`
   ```
