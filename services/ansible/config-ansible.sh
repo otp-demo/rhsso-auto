@@ -1,5 +1,5 @@
 #!/bin/bash
-source ./utils.sh
+source ../../utils.py
 
 # source .env
 wait_for_preprocessing

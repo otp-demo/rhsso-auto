@@ -15,11 +15,11 @@ You can automate the deployment of Ansible client via Jobs and Argo CD but SAML 
 You can automate deployment of Ansible client for RH-SSO using following:
 
 * **Step 1: Create an image for deploying client**
-  * First of all you will need to create an image using file [create-client-ansible.py](../create-client-ansible.py) which has all the required os, tools, and payload information to access RH-SSO api and create client. Please pay attention to environment variables that are in use and they must be available to successfully create Ansible client. As mentioned in prerequisites section, environment variables are stored in two differrent places ( `argocd-configs` Config Map and `sso-configs` Secret). A complete list of environment variables can be found at [Integration with RHSSO Environment Variables
+  * First of all you will need to create an image using file [create-client-ansible.py](create-client-ansible.py) which has all the required os, tools, and payload information to access RH-SSO api and create client. Please pay attention to environment variables that are in use and they must be available to successfully create Ansible client. As mentioned in prerequisites section, environment variables are stored in two differrent places ( `argocd-configs` Config Map and `sso-configs` Secret). A complete list of environment variables can be found at [Integration with RHSSO Environment Variables
 ](https://github.com/otp-demo/rhsso-auto#integration-with-rhsso-environment-variables).
 
 * **Step 2: Run script to create an image and run from a Dockerfile**
-  * After you are satisfied with variables, payload information etc. in [create-client-ansible.py](../create-client-ansible.py) file, you can use a script [config-ansible.sh](../config-ansible.sh) to run .py and create a Dockerfile that that installs [requirements](../requirements.txt) and runs [config-ansible.sh](../config-ansible.sh). For testing, you can also run it locally by setting local environment variables or storing them in .env file.
+  * After you are satisfied with variables, payload information etc. in [create-client-ansible.py](create-client-ansible.py) file, you can use a script [config-ansible.sh](config-ansible.sh) to run .py and create a Dockerfile that that installs [requirements](../requirements.txt) and runs [config-ansible.sh](config-ansible.sh). For testing, you can also run it locally by setting local environment variables or storing them in .env file.
     * **Run locally**
       ```
       python3 create-client-ansible.py 

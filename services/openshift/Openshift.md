@@ -1,7 +1,7 @@
 # Introduction
 we will see using Keycloak as an Identity Provider for your Openshift cluster act as an Identity Broker. Vise versa is also possible, which won't be covered in this tutorial
 
-![2](../images/openshift-flow.png)
+![2](../../images/openshift-flow.png)
 
 Figure 1.1
 
@@ -10,7 +10,7 @@ Once you configure the identity provider is configured, you will see a new butto
 This tutorial applies to all vanilla Openshift clusters, including the hub cluster and managed clusters.
 
 # Prerequisites
-- Vanilla Openshift cluster. (Notice that any managed Openshift cluster with Cloud IAM set up, this approach will not work. Please refer to instruction for [IBM cloud with RHSSO](IBM-cloud.md))
+- Vanilla Openshift cluster. (Notice that any managed Openshift cluster with Cloud IAM set up, this approach will not work. Please refer to instruction for [IBM cloud with RHSSO](../ibm/IBM-cloud.md))
 - RHSSO operator and instance ready.
 - CA certificate bundle for RHSSO instance if it has a self-signed cert configuration
 
@@ -31,12 +31,12 @@ Where
 - "Administration -> Cluster Settings -> Global Configuration -> Oauth"
 - Click Add button under "Identity Providers",  and choose OpenID Connect
 
-![](../images/openshift-id-config-add.png)
+    ![](../../images/openshift-id-config-add.png)
 
 Figure 1.2
 
 3. Configure OAuth Openshift
-![](../images/openshift-oidc.png)
+![](../../images/openshift-oidc.png)
 
 Figure 1.3
 ```bash
@@ -47,7 +47,7 @@ Issuer URL: https://${keycloak-host}/auth/realms/${realm-name}
 ```
 
 4. (Optional) If the keycloak/RHSSO is using self-signed certs, provide the complete chain of trust to "CA file" option.
-![](../images/openshift-oidc-ca.png)
+![](../../images/openshift-oidc-ca.png)
 
 Figure 1.4
 

@@ -11,7 +11,7 @@ if [[ $? -ne 0 ]]; then
 fi
 
 echo "Adding the argocd-configs to cluster..."
-oc apply -f k8s/sso-configs.yaml
+oc apply -f ../k8s/sso-configs.yaml
 
 oc patch cm argocd-configs -n sso-integration \
 -p "{\"data\": {\"PASSWORD\": \"${PASSWORD}\", \"USER_NAME\": \"${USERNAME}\", \"KEYCLOAK_HOSTNAME\": \"${KEYCLOAK_HOSTNAME}\"}}"

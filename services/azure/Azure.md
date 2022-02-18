@@ -9,9 +9,9 @@ You can automate the deployment of Azure client via Jobs and Argo CD but due to 
 
 ## Solution Overview
 
-![Alt text](../images/rh-sso-azure-animated.gif?raw=true "Azure SAML SSO - Azure SP")
+![Alt text](../../images/rh-sso-azure-animated.gif?raw=true "Azure SAML SSO - Azure SP")
 
-> High-resolution version (.svg) of this diagram is available at [images/rh-sso-azure-high-res.svg](../images/rh-sso-azure-high-res.svg)
+> High-resolution version (.svg) of this diagram is available at [images/rh-sso-azure-high-res.svg](../../images/rh-sso-azure-high-res.svg)
 
 ## Prerequisites 
 - Working RH-SSO instance
@@ -22,11 +22,11 @@ You can automate the deployment of Azure client via Jobs and Argo CD but due to 
 You can automate deployment of Azure client for RH-SSO using following:
 
 * **Step 1: Create an image for deploying client**
-  * First of all you will need to create an image using file [create-client-azure.py](../create-client-azure.py) which has all the required os, tools, and payload information to access RH-SSO api and create client. Please pay attention to environment variables that are in use and they must be available to successfully create Azure client. As mentioned in prerequisites section, environment variables are stored in two differrent places ( `argocd-configs` Config Map and `sso-configs` Secret). A complete list of environment variables can be found at [Integration with RHSSO Environment Variables
+  * First of all you will need to create an image using file [create-client-azure.py](create-client-azure.py) which has all the required os, tools, and payload information to access RH-SSO api and create client. Please pay attention to environment variables that are in use and they must be available to successfully create Azure client. As mentioned in prerequisites section, environment variables are stored in two differrent places ( `argocd-configs` Config Map and `sso-configs` Secret). A complete list of environment variables can be found at [Integration with RHSSO Environment Variables
 ](https://github.com/otp-demo/rhsso-auto#integration-with-rhsso-environment-variables).
 
 * **Step 2: Run script to create an image and run from a Dockerfile**
-  * After you are satisfied with variables, payload information etc. in [create-client-azure.py](../create-client-azure.py) file, you can use a script [config-azure.sh](../config-azure.sh) to run .py and create a Dockerfile that that installs [requirements](../requirements.txt) and runs [config-azure.sh](../config-azure.sh). For testing, you can also run it locally by setting local environment variables or storing them in .env file.
+  * After you are satisfied with variables, payload information etc. in [create-client-azure.py](../create-client-azure.py) file, you can use a script [config-azure.sh](config-azure.sh) to run .py and create a Dockerfile that that installs [requirements](../../requirements.txt) and runs [config-azure.sh](config-azure.sh). For testing, you can also run it locally by setting local environment variables or storing them in .env file.
     * **Run locally**
       ```
       python3 create-client-azure.py 
@@ -65,7 +65,7 @@ You can automate deployment of Azure client for RH-SSO using following:
 
   ```
 ## Manual Configuration for Azure integration
-After client is setup on RH-SSO, next step is to federate custom domain and run PowerShell script [IdPFederation.ps1](../IdPFederation.ps1). Please complete below three steps to configure your Microsoft Azure tenant to use RH-SSO as Identity Provider for your custom domain. 
+After client is setup on RH-SSO, next step is to federate custom domain and run PowerShell script [IdPFederation.ps1](IdPFederation.ps1). Please complete below three steps to configure your Microsoft Azure tenant to use RH-SSO as Identity Provider for your custom domain. 
 
 * **Step 1: Add Custom Domain to AAD**
   * Sign in to the Azure portal using a **Global administrator** account for the directory.
@@ -84,12 +84,12 @@ After client is setup on RH-SSO, next step is to federate custom domain and run 
   
   After above two steps are completed we are ready to federate `acme.com` domain to Azure tenancy. A sample script `IdPFederation.ps1` can be found in this repo. Running this script will allow RH-SSO users with a verified domain specified in `$dom` variable to sign into Azure Portal via RH-SSO as IdP.
 
-  > Global Administrator running this script should go through all the comments in [IdPFederation.ps1](../IdPFederation.ps1) file and update variables as required.
+  > Global Administrator running this script should go through all the comments in [IdPFederation.ps1](IdPFederation.ps1) file and update variables as required.
 
 If run successfully, you should be able to use RH-SSO as IdP for signing into Azure portal.
 
 
-⚠️ Users must be added manually on Azure Active Directory (AAD) using `New-MsolUser` command and with correct `ImmutableId` - please refer to comments on [IdPFederation.ps1](../IdPFederation.ps1) for more details. For example, if you have a user John Smith on RH-SSO, you must assign attribute with key `saml.persistent.name.id.for.urn:federation:MicrosoftOnline` and `somerandomstring` as value on RH-SSO. You will then have to manually create this user in AAD and use same random string as value for `ImmutableId`. Sample of complete `New-MsolUser` command can be found at the bottom of `IdPFederation.ps1` script. 
+⚠️ Users must be added manually on Azure Active Directory (AAD) using `New-MsolUser` command and with correct `ImmutableId` - please refer to comments on [IdPFederation.ps1](IdPFederation.ps1) for more details. For example, if you have a user John Smith on RH-SSO, you must assign attribute with key `saml.persistent.name.id.for.urn:federation:MicrosoftOnline` and `somerandomstring` as value on RH-SSO. You will then have to manually create this user in AAD and use same random string as value for `ImmutableId`. Sample of complete `New-MsolUser` command can be found at the bottom of `IdPFederation.ps1` script. 
 
 ⚠️ RBAC for each user must be configured on Microsoft Azure. Azure role-based access control (Azure RBAC) has several Azure built-in roles that you can assign to users that are federated from custom domain. You can learn more about built-in roles here: [Azure built-in roles](https://docs.microsoft.com/en-us/azure/role-based-access-control/built-in-roles). Please also review how to assign roles roles using Azure portal here: [How to assign Azure roles using the Azure portal](https://docs.microsoft.com/en-us/azure/role-based-access-control/role-assignments-portal?tabs=current)
 
