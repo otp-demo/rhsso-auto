@@ -9,7 +9,9 @@ You can automate the deployment of Azure client via Jobs and Argo CD but due to 
 
 ## Solution Overview
 
-![Alt text](../images/azure-saml-rhsso.png?raw=true "Azure SAML SSO - Azure SP")
+![Alt text](../images/rh-sso-azure-animated.gif?raw=true "Azure SAML SSO - Azure SP")
+
+> High-resolution version (.svg) of this diagram is available at [images/rh-sso-azure-high-res.svg](../images/rh-sso-azure-high-res.svg)
 
 ## Prerequisites 
 - Working RH-SSO instance
