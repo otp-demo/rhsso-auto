@@ -19,7 +19,9 @@ Red Hat Single Sign-On (RH-SSO) is based on the Keycloak project and enables you
 
 ## Solution Overview
 
-![Alt text](images/rh-sso-updated.png?raw=true "RH-SSO Solution Overview")
+![Alt text](images/rh-sso-animated.gif?raw=true "RH-SSO Solution Overview")
+
+> High-resolution version (.svg) of this diagram is available at [images/rh-sso-high-res.svg](images/rh-sso-high-res.svg)
 
 Big shout out to [@Mahesh](https://github.com/maheshau1)
 
