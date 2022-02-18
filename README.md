@@ -3,17 +3,17 @@
 ## Introduction
 Red Hat Single Sign-On (RH-SSO) is based on the Keycloak project and enables you to secure your web applications by providing Web single sign-on (SSO) capabilities based on popular standards such as SAML 2.0, OpenID Connect and OAuth 2.0. The RH-SSO server can act as a SAML or OpenID Connect-based Identity Provider, mediating with your enterprise user directory or 3rd-party SSO provider for identity information and your applications via standards-based tokens. Configuration for each service listed below is different and it is recommended to familiarise yourself with each readme before attempting configuration:
 
-[Ansible](configuration-docs/Ansible.md)
+[Ansible](services/ansible/Ansible.md)
 
-[Argo CD](configuration-docs/Argocd.md)
+[Argo CD](services/argo-cd/Argocd.md)
 
-[AWS](configuration-docs/AWS.md)
+[AWS](services/aws/AWS.md)
 
-[Azure](configuration-docs/Azure.md)
+[Azure](services/azure/Azure.md)
 
-[IBM Cloud](configuration-docs/IBM-cloud.md)
+[IBM Cloud](services/ibm/IBM-cloud.md)
 
-[OpenShift](configuration-docs/Openshift.md)
+[OpenShift](services/openshift/Openshift.md)
 
 [Example App](https://github.com/akiyamn/rhsso-auto-deploy)
 

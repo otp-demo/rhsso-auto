@@ -7,6 +7,7 @@ After your RH-SSO instance is deployed you should see that client for Argo CD is
 - Working RH-SSO instance
 - Working Argo CD instance
 - Administrator access for RH-SSO and Argo CD
+- Environment Variables from `argocd-configs` Config Map and `sso-configs` Secret
 
 ## Configuration
 * **Step 1: Find your Argo CD server route**

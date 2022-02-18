@@ -4,6 +4,6 @@ WORKDIR /usr/src
 
 COPY . /usr/src/
 
-RUN pip3.9 install -r requirements.txt
+RUN pip3.9 install -r ../../requirements.txt
 
 CMD ["/bin/bash", "config-ansible.sh"]

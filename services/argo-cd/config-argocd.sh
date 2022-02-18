@@ -1,5 +1,5 @@
 #!/bin/bash
-source ./utils.sh
+source ../../utils.sh
 
 # source .env
 wait_for_preprocessing

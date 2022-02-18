@@ -2,12 +2,12 @@ There is a need to integrate RHSSO with IBM cloud because for the managed opensh
 
 
 In order to integrate to IBM cloud, 2 optioons are available: IBM Cloud App ID and IBM id. High level flow:
-![IBM Cloud App ID vs IBMid](../images/IBMidvsAppID.png)
+![IBM Cloud App ID vs IBMid](../../images/IBMidvsAppID.png)
 
 IBM Cloud App ID is suitable for our use case based on the [cloud saml federation guide](https://www.ibm.com/cloud/blog/ibm-cloud-saml-federation-guide):
 1) App ID is self-service, and doesn't require manual process. This allows further automation.
 2) The federation only has impact on the the IBM Cloud account in which the IBM Cloud App ID instance is configured to allow logins. It does not impact any other IBM Cloud accounts or IBM SaaS offerings.
-![High level flow](../images/ibm-cloud-iam-rhsso.png)
+![High level flow](../../images/ibm-cloud-iam-rhsso.png)
 
 # Pre-requisites
 1. Create an instance of App ID from IBM cloud catalog.
