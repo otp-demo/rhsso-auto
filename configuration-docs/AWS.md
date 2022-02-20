@@ -1,6 +1,6 @@
 # RH-SSO integration with AWS
 ## Introduction
-The following diagram illustrates the flow for SAML-enabled flow [#useful-links][1]:
+The following diagram illustrates the flow for [SAML-enabled flow](#useful-links)[1]:
 ![AWS SAML-enabled Flow](../images/aws-saml-flow.png)
 
 ## Prerequisites
