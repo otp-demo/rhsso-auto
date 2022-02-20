@@ -22,9 +22,10 @@ Red Hat Single Sign-On (RH-SSO) is based on the Keycloak project and enables you
 Big shout out to [@Mahesh](https://github.com/maheshau1)
 
 # Integration with RHSSO Environment Variables
-RHSSO environment variables are used across different services (Ansible tower, Openshift cluster etc.), some are commonly used by all components, while some are used by a specific service. Details below. In openshift enviornment, environment variables are stored in two places: `confimap map: argocd-configs` (wrong name will need to change later on) and `secret: sso-configs` (Secret single source from vault with path `/rhsso/integration`)
+RHSSO environment variables are used across different services (Ansible tower, Openshift cluster etc.), some are commonly used by all components, while some are used by a specific service. Details below. In openshift enviornment, environment variables are stored in two places: `confimap map: argocd-configs` (wrong name, will need to change in the future) and `secret: sso-configs` (Secret single source from vault with path `/rhsso/integration`).
+Note: Location below indicates where the enviornment variables are stored in Openshift/K8s environment. Implementation can be found [here](https://github.com/otp-demo/otp-gitops-services).
 
-| Name  | Location  | Service  |  Comment
+| Name  | Location  | Service  |  Description
 |---|---|---|---|
 | MASTER_REALM | argocd-configs | Common | Master realm name, used to get access token |
 | USER_NAME  | argocd-configs  | Common  | User name to get access token, automatically populated preporcessing job (TODO: This however should go to secret)  |

@@ -1,3 +1,4 @@
+# Introduction
 There is a need to integrate RHSSO with IBM cloud because for the managed openshift cluster on IMB Cloud, IBM automatically sets up the OAuth server to use IBM Cloud IAM. You can't change the identity provider. IBM Cloud IAM is also set up to automatically sync to RBAC so that you can use IAM to manage access to and within the cluster. Therefore, the [OAuth setup for vanilla openshift cluster](https://docs.openshift.com/container-platform/4.8/authentication/identity_providers/configuring-oidc-identity-provider.html) will not work, as all authenticated related operator and pods are disabled, and OAuth CR won't be managed. Using ID federation with IAM will be a feasible approach.
 
 
