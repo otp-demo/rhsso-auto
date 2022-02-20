@@ -58,7 +58,7 @@ The scripts for AWS is fully automated, which creates and configures the client 
     ```
 
 ## Manual Configuration
-The example manual configuraiton can be found on the [post](https://neuw.medium.com/aws-connect-saml-based-identity-provider-using-keycloak-9b3e6d0111e6) - (2)[#useful-links]
+The example manual configuraiton can be found on the [post](https://neuw.medium.com/aws-connect-saml-based-identity-provider-using-keycloak-9b3e6d0111e6) - [2](#useful-links)
 
 ## Useful links
 1. [Enabling SAML 2.0 federated users to access the AWS Management Console](https://docs.aws.amazon.com/IAM/latest/UserGuide/id_roles_providers_enable-console-saml.html)
