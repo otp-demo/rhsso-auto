@@ -3,19 +3,16 @@
 ## Introduction
 Red Hat Single Sign-On (RH-SSO) is based on the Keycloak project and enables you to secure your web applications by providing Web single sign-on (SSO) capabilities based on popular standards such as SAML 2.0, OpenID Connect and OAuth 2.0. The RH-SSO server can act as a SAML or OpenID Connect-based Identity Provider, mediating with your enterprise user directory or 3rd-party SSO provider for identity information and your applications via standards-based tokens. Configuration for each service listed below is different and it is recommended to familiarise yourself with each readme before attempting configuration:
 
-[Ansible](configuration-docs/Ansible.md)
+|  Service | Automation  | Description  |
+|--:|--|--|
+| [Ansible Automation Controller](configuration-docs/Ansible.md)  | Semi-automated  | RH-SSO client creation and configuraiton is automated. Manul configuration on Ansible SAML setting is required.  |
+| [Argo CD](configuration-docs/Argocd.md) | Fully-automated  | Both RH-SSO and ArgoCD are automated.  |
+| [AWS](configuration-docs/AWS.md)  | Fully-automated  | Both RH-SSO and AWS are automated. IdP-initiated SAML flow. |
+| [Azure](configuration-docs/Azure.md)  | Semi-automated  | RH-SSO client creation and configuraiton is automated. Configuration on Azure side is required  |
+| [IBM Cloud](configuration-docs/IBM-cloud.md)  | Fully-manual  | RHSSO client, IBM Cloud IAM, and App ID configuration are all mnaul. (can be automted)  |
+| [Vanilla OpenShift](configuration-docs/Openshift.md)  | Fully-automated  | Both RH-SSO and Openshift (vanilla cluster only) are automated.  |
+| [Example App](https://github.com/akiyamn/rhsso-auto-deploy)  | Nil  |  Nil |
 
-[Argo CD](configuration-docs/Argocd.md)
-
-[AWS](configuration-docs/AWS.md)
-
-[Azure](configuration-docs/Azure.md)
-
-[IBM Cloud](configuration-docs/IBM-cloud.md)
-
-[OpenShift](configuration-docs/Openshift.md)
-
-[Example App](https://github.com/akiyamn/rhsso-auto-deploy)
 
 ## Solution Overview
 
@@ -47,8 +44,8 @@ Note: Location below indicates where the enviornment variables are stored in Ope
 | ARGO_ADMIN_LASTNAME | sso-configs  | ArgoCD  | User lastname. should be general. |
 | OPENSHIFT_OAUTH_NAME | argo-configs  | Openshift cluster  | The name that will be used to match configs between the openshift cluster and RHSSO. |
 | CA_CERT_BUNDLE | sso-configs  | Openshift cluster  | The CA cert chain of trust for Keycloak/RHSSO |
-| HTTP_DEBUG | argo-configs  | Common | To turn on DEBUG mode for http traffic, mainly for http contents |
-| TLS_VERIFY | argo-configs  | Common | Default to true. Can turn off in case the TLS is not available on RHSSO |
+| HTTP_DEBUG | argo-configs  | Common | To turn on DEBUG mode for http traffic, mainly for http contents (true/false) |
+| TLS_VERIFY | argo-configs  | Common | Default to true. Can turn off in case the TLS is not available on RHSSO (true/false) |
 | AZURE_CLIENT_ID | argo-configs  | Azure account | The client name for Azure client |
 | AWS_CLIENT_SAML_URL | argo-configs  | AWS | The saml url to be imported into keycloak to create AWS client |
 | AWS_ACCESS_KEY_ID | sso-configs  | AWS | Target aws accont key ID |
