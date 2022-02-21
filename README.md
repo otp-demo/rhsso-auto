@@ -22,8 +22,42 @@ Red Hat Single Sign-On (RH-SSO) is based on the Keycloak project and enables you
 
 Big shout out to [@Mahesh](https://github.com/maheshau1)
 
-# Integration with RHSSO Environment Variables
-RHSSO environment variables are used across different services (Ansible tower, Openshift cluster etc.), some are commonly used by all components, while some are used by a specific service. Details below. In openshift enviornment, environment variables are stored in two places: `confimap map: argocd-configs` (wrong name, will need to change in the future) and `secret: sso-configs` (Secret single source from vault with path `/rhsso/integration`).
+## How to Use
+### Openshift/k8s environment
+To run the job on Openshift or K8S, it is recommended to follow the [prerequisites](https://github.com/otp-demo/otp-gitops-services#rhsso-integration). The process is also described in [Solution-overview](#solution-overview). Example job:
+```yaml
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: cluster-keycloak-integration
+  namespace: sso-integration
+spec:
+  template:
+    spec:
+      containers:
+      - name: cluster-keycloak-integration
+        image: quay.io/leoliu2011/cluster-keycloak-integration:v1
+        imagePullPolicy: Always
+        envFrom:
+        - configMapRef:
+            name: argocd-configs
+        - secretRef:
+            name: sso-configs
+      restartPolicy: Never
+  backoffLimit: 5
+```
+Notice the environment varialbes are provided by configmap `argocd-configs` and secret `sso-configs`. Details for each items are provided in [below section](#integration-with-rhsso-environment-variables)
+
+### Test locally
+You can test the `.py` python files or shell scripts with following recommendation:
+- python3.6+. Python 3.9
+- Provide .env file that combines the [list of environment variables](#integration-with-rhsso-environment-variables). Refer to example [.env](.env.example) file.
+
+
+
+
+# Integration with RH-SSO Environment Variables
+RH-SSO environment variables are used across different services (Ansible tower, Openshift cluster etc.), some are commonly used by all components, while some are used by a specific service. Details below. In openshift enviornment, environment variables are stored in two places: `confimap map: argocd-configs` (wrong name, will need to change in the future) and `secret: sso-configs` (Secret single source from vault with path `/rhsso/integration`).
 Note: Location below indicates where the enviornment variables are stored in Openshift/K8s environment. Implementation can be found [here](https://github.com/otp-demo/otp-gitops-services).
 
 | Name  | Location  | Service  |  Description
