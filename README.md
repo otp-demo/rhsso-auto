@@ -24,7 +24,14 @@ Big shout out to [@Mahesh](https://github.com/maheshau1)
 
 ## How to Use
 ### Openshift/k8s environment
-To run the job on Openshift or K8S, it is recommended to follow the [prerequisites](https://github.com/otp-demo/otp-gitops-services#rhsso-integration). The process is also described in [Solution-overview](#solution-overview). Example job:
+To run the job on Openshift or K8S, it is recommended to follow the [prerequisites](https://github.com/otp-demo/otp-gitops-services#rhsso-integration). The process is also described in [Solution-overview](#solution-overview). 
+1. Create and push the image for the target service.
+Example:
+```bash
+docker build -t quay.io/${username}/cluster-keycloak-integration:v1 -f Dockerfile-cluster .
+docker push quay.io/${username}/cluster-keycloak-integration:v1
+```
+2. Create and deploy a job. Example:
 ```yaml
 apiVersion: batch/v1
 kind: Job
@@ -36,7 +43,7 @@ spec:
     spec:
       containers:
       - name: cluster-keycloak-integration
-        image: quay.io/leoliu2011/cluster-keycloak-integration:v1
+        image: quay.io/${username}/cluster-keycloak-integration:v1
         imagePullPolicy: Always
         envFrom:
         - configMapRef:
