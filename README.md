@@ -46,12 +46,12 @@ spec:
       restartPolicy: Never
   backoffLimit: 5
 ```
-Notice the environment varialbes are provided by configmap `argocd-configs` and secret `sso-configs`. Details for each items are provided in [below section](#integration-with-rhsso-environment-variables)
+Notice the environment varialbes are provided by configmap `argocd-configs` and secret `sso-configs`. Details for each items are provided in [below section](#integration-with-rh-sso-environment-variables)
 
 ### Test locally
 You can test the `.py` python files or shell scripts with following recommendation:
 - python3.6+. Python 3.9
-- Provide .env file that combines the [list of environment variables](#integration-with-rhsso-environment-variables). Refer to example [.env](.env.example) file.
+- Provide .env file that combines the [list of environment variables](#integration-with-rh-sso-environment-variables). Refer to example [.env](.env.example) file.
 
 
 
