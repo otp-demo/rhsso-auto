@@ -60,7 +60,10 @@ The scripts for AWS is fully automated, which creates and configures the client 
         restartPolicy: Never
     backoffLimit: 5
     ```
-Note: the image can be also run locally with container runtime. Remember to include all environment variables by combining all variables from `argocd-config` and `sso-configs` 
+  
+  The job is referenced in the [ArgoCD application](https://github.com/otp-demo/otp-gitops/blob/master/0-bootstrap/single-cluster/2-services/argocd/instances/rhsso-integration-aws-instance.yaml) following Gitops pattern.
+
+  Note: the image can be also run locally with container runtime. Remember to include all environment variables by combining all variables from `argocd-config` and `sso-configs` 
 
 ## Manual Configuration
 This figure below illustrates high-level steps of confiugraitons on RH-SSO (Keycloak), which you can also find the corresponding automation script in [config-aws.sh](../config-aws.sh).
