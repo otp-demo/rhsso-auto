@@ -1,7 +1,7 @@
 # RH-SSO integration with AWS
 ## Introduction
 The following diagram illustrates the flow for [SAML-enabled flow](#useful-links)[1]:
-![AWS SAML-enabled Flow](../images/aws-saml-flow.png).
+![AWS SAML-enabled Flow](../images/rhsso-aws-flow.png).
 
 In AWS, only IdP-initiated SAML flow is supported, which means user needs to be provided with the URL from the IdP to access the Single Signon page for AWS.
 
