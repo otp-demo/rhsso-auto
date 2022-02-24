@@ -75,10 +75,11 @@ export AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}
 export AWS_DEFAULT_REGION=${AWS_DEFAULT_REGION}
 
 echo "Create and configure AWS client, create users and groups as well in keycloak..."
+# Step 1
 clientOutput=$(python3.9 -W ignore create-client-aws.py)
 print_failure "Failed to create client: ${clientOutput}"
 
-
+# Step 2
 echo "Export IDP SSO descriptor from keycloak"
 curl -k -o SAML-Metadata-IDPSSODescriptor.xml "${KEYCLOAK_HOSTNAME}/auth/realms/${KEYCLOAK_REALM}/protocol/saml/descriptor"
 print_failure "Failed to export IDP SSO descriptor"
@@ -116,6 +117,7 @@ print_failure "Failed to update the iam role with policies"
 echo "Finished AWS setup"
 echo "Keycloak setup after AWS configuration..."
 
+# Step 3
 echo "Keycloak role mapping..."
 roleName="${roleArn},${samlProviderArn}"
 echo $roleName
