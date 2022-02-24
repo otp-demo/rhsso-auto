@@ -120,4 +120,4 @@ echo "Keycloak role mapping..."
 roleName="${roleArn},${samlProviderArn}"
 echo $roleName
 export KEYCLOAK_AWS_MAPPING_ROLE_NAME=${roleName}
-python3.9 update-keycloak-aws-configs.py
+python3.9 -W ignore update-keycloak-aws-configs.py

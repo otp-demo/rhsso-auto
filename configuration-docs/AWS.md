@@ -5,17 +5,21 @@ The following diagram illustrates the flow for [SAML-enabled flow](#useful-links
 
 In AWS, only IdP-initiated SAML flow is supported, which means user needs to be provided with the URL from the IdP to access the Single Signon page for AWS.
 
-The scripts for AWS is fully automated, which creates and configures the client on Keycloak, and set up on AWS IAM.
+The scripts for AWS is fully automated, which creates and configures the client on Keycloak, and set up identity provider and on AWS IAM.
 
 ## Prerequisites
 - Working RH-SSO instance
-- Working Ansible Controller instance
-- Administrator access for Ansible and RH-SSO
-- [Environment Variables](../README.md#integration-with-rhsso-environment-variables) from `argocd-configs` Config Map and `sso-configs` Secret.
+- Working AWS management console. Note: this aws account must have a "clean" IAM setup. It has never been setup by this instruction. Otherwise, please clean the existing configuraitons by:
+  - Delete IAM SAML target identity provider (e.g. demo) from this instruction
+  - Detach the policy fromt he role based on this instruction
+  - Delete the role 
+- Administrator access for AWS account and RH-SSO
+- [Environment Variables](../README.md#integration-with-rhsso-environment-variables) provided to `argocd-configs` Config Map and `sso-configs` Secret. Remember to include all variables provided on `Location` column for `AWS` and `Common`.
+- [Automation Only](#automation) Openshift / K8S cluster / Docker
 
 ## Automation
 * **Step 1: Create an image for deploying client**
-    * Create an image using file [config-aws.sh](../config-aws.py).  A complete list of environment variables can be found at [Integration with RHSSO Environment Variables](https://github.com/otp-demo/rhsso-auto#integration-with-rhsso-environment-variables).
+    * Create an image using file [config-aws.sh](../config-aws.py).  A complete list of environment variables can be found at [Integration with RH-SSO Environment Variables](https://github.com/otp-demo/rhsso-auto#integration-with-rhsso-environment-variables).
 * **Step 2: Run script to create an image and run from a Dockerfile**
  * After you are satisfied with variables, payload information etc. in [create-client-aws.py](../create-client-aws.py) and [update-keycloak-aws-configs.py](../update-keycloak-aws-configs.py) files, you can use a script [config-aws.sh](../config-aws.sh) to run .py and create a Dockerfile that that installs [requirements](../requirements.txt) and runs [config-aws.sh](../config-aws.sh). For testing, you can also run it locally by setting local environment variables or storing them in .env file.
     * **Run locally**
@@ -56,10 +60,17 @@ The scripts for AWS is fully automated, which creates and configures the client 
         restartPolicy: Never
     backoffLimit: 5
     ```
+Note: the image can be also run locally with container runtime. Remember to include all environment variables by combining all variables from `argocd-config` and `sso-configs` 
 
 ## Manual Configuration
-The example manual configuraiton can be found on the [post](https://neuw.medium.com/aws-connect-saml-based-identity-provider-using-keycloak-9b3e6d0111e6) - [2](#useful-links)
+This figure below illustrates high-level steps of confiugraitons on RH-SSO (Keycloak), which you can also find the corresponding automation script in [config-aws.sh](../config-aws.sh).
+![](../images/aws-keycloak-federation.png)
+### Keycloak - Configure AWS as a client. (WIP)
+- Create and configure AWS as a client in the target realm
 
+- AWS Add & Setup Identity Provider & Roles
+
+- Keycloak Role Mpaaing, Group, and User Setup.
 ## Useful links
 1. [Enabling SAML 2.0 federated users to access the AWS Management Console](https://docs.aws.amazon.com/IAM/latest/UserGuide/id_roles_providers_enable-console-saml.html)
 2. [AWS SAML based User Federation using Keycloak](https://neuw.medium.com/aws-connect-saml-based-identity-provider-using-keycloak-9b3e6d0111e6)
