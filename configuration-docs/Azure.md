@@ -15,7 +15,8 @@ You can automate the deployment of Azure client via Jobs and Argo CD but due to 
 
 ## Prerequisites 
 - Working RH-SSO instance
-- Global Administrator access on Azure to federate domain
+- Global administrator role on Azure to add, verify and federate custom domain
+- Administrator access to domain registrar (eg. GoDaddy) to add TXT records for domain verification 
 - Windows OS to install and run PowerShell script
 - Environment Variables from `argocd-configs` Config Map and `sso-configs` Secret
 ## Automation
